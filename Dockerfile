@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install
+RUN yarn install
 
 # Bundle app source
 COPY . .
 
 # Creates a "dist" folder with the production build
-RUN npm run build
+RUN yarn run build
 
 RUN npx prisma migrate deploy
-CMD [ "node", "dist/main.js" ]
+CMD [ "yarn", "run", "start:prod" ]
