@@ -17,4 +17,5 @@ COPY . .
 RUN yarn run build
 
 RUN npx prisma migrate deploy
+RUN prisma generate
 RUN yarn run start:prod
