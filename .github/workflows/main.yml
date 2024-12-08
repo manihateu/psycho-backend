@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: ${{ secrets.SERVER_PORT }}
         script: |
-          cd /psycho-ai
+          cd /opt/psycho-backend
           git pull origin main
           docker compose down
           docker compose up --build -d
