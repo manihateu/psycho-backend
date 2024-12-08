@@ -17,4 +17,4 @@ COPY . .
 RUN yarn run build
 
 RUN npx prisma migrate deploy
-CMD [ "yarn", "run", "start:prod" ]
+RUN yarn run start:prod
