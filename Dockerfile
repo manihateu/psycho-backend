@@ -1,27 +1,20 @@
-# Указываем базовый образ
-FROM node:23 as builder
+# Base image
+FROM node:23
 
-# Устанавливаем рабочую директорию
+# Create app directory
 WORKDIR /usr/src/app
 
-# Копируем package.json и устанавливаем зависимости
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
 
-# Копируем всё остальное и собираем проект
+# Bundle app source
 COPY . .
+
+# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Production stage
-FROM node:23 as production
-
-WORKDIR /usr/src/app
-
-# Копируем только нужные файлы для production
-COPY package*.json ./
-RUN npm install —only=production
-COPY —from=builder /usr/src/app/dist ./dist/
-
-# Запуск приложения
 RUN npx prisma migrate production
-CMD ["npm", "run", "start:prod"]
+CMD [ "node", "dist/main.js" ]
