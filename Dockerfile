@@ -18,4 +18,4 @@ RUN yarn run build
 
 RUN npx prisma migrate deploy
 RUN npx prisma generate
-RUN yarn run start:prod
+CMD ["yarn", "run", "start:prod"]
