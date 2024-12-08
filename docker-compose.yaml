@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-app
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npx prisma migrate deploy && npm run start:prod"
+    environment:
+      DATABASE_URL: postgres://postgres:password@192.168.0.7:5432/learncup
