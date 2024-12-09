@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Копируем package.json и package-lock.json для установки зависимостей
 COPY package*.json ./
+COPY yarn.lock ./
 
 # Устанавливаем зависимости
 RUN yarn install
@@ -31,9 +32,10 @@ COPY prisma ./prisma
 
 # Генерируем Prisma Client
 RUN npx prisma generate
-
+RUN chmod +x /app/dist/main.js
+RUN ls -al /app/dist
 # Открываем порт приложения
 EXPOSE 3000
 
 # Выполняем миграции Prisma и запускаем приложение
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node /app/dist/main.js"]
