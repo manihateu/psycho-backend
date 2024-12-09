@@ -16,7 +16,7 @@ COPY . .
 
 # Компилируем TypeScript в JavaScript
 RUN yarn run build
-
+RUN ls -al /app/dist
 # Финальный образ
 FROM node:23-alpine AS production
 
@@ -24,8 +24,8 @@ FROM node:23-alpine AS production
 WORKDIR /app
 
 # Копируем зависимости и сборку из предыдущего этапа
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/dist /app/dist
 
 # Копируем Prisma файлы
 COPY prisma ./prisma
