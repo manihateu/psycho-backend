@@ -1,5 +1,5 @@
 # Указываем базовый образ Node.js
-FROM node:23-alpine AS builder
+FROM node:23-alpine 
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
@@ -18,19 +18,16 @@ COPY . .
 RUN yarn run build
 RUN ls -al /app/dist
 # Финальный образ
-FROM node:23-alpine AS production
-
-# Устанавливаем рабочую директорию
-WORKDIR /app
 
 # Копируем зависимости и сборку из предыдущего этапа
-# COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist .
+COPY node_modules ./node_modules
+COPY dist ./dist
 
 # Копируем Prisma файлы
 COPY prisma ./prisma
 
 # Генерируем Prisma Client
+RUN npx prisma migrate deploy
 RUN npx prisma generate
 RUN chmod +x /app/dist/main.js
 RUN ls -al /app/dist
