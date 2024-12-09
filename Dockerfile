@@ -27,4 +27,4 @@ RUN npx prisma generate
 EXPOSE 3000
 
 # Выполняем миграции Prisma и запускаем приложение
-CMD ["sh", "-c", "echo 'Current directory: ' $(pwd) && ls -al /app && yarn run start:dev"]
+CMD ["sh", "-c", "echo 'Current directory: ' $(pwd) && ls -al /app && node dist/main"]
