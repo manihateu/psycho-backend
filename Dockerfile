@@ -25,7 +25,7 @@ WORKDIR /app
 
 # Копируем зависимости и сборку из предыдущего этапа
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder dist ./dist
+COPY --from=builder /app/dist ./dist
 
 # Копируем Prisma файлы
 COPY prisma ./prisma
