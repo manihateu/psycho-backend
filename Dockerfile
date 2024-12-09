@@ -8,13 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Устанавливаем зависимости
-RUN npm install
+RUN yarn install
 
 # Копируем остальные файлы проекта
 COPY . .
 
 # Компилируем TypeScript в JavaScript
-RUN npm run build
+RUN yarn run build
 
 # Финальный образ
 FROM node:23-alpine AS production
@@ -23,8 +23,8 @@ FROM node:23-alpine AS production
 WORKDIR /app
 
 # Копируем зависимости и сборку из предыдущего этапа
-COPY --from=builder /app/node_modules/ ./node_modules/
-COPY --from=builder /app/dist/ ./dist/
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
 
 # Копируем Prisma файлы
 COPY prisma ./prisma
@@ -36,4 +36,4 @@ RUN npx prisma generate
 EXPOSE 3000
 
 # Выполняем миграции Prisma и запускаем приложение
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
