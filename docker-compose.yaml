@@ -12,4 +12,5 @@ services:
     ports:
       - "3000:3000"
     environment:
-      POSTGRES_PRISMA_URL: postgres://postgres:password@192.168.0.7:5432/learncup
+      # POSTGRES_PRISMA_URL: postgres://postgres:password@192.168.0.7:5432/learncup
+      POSTGRES_PRISMA_URL: postgres://default:BLK6EPM7vOfa@ep-still-pond-a2zw1wye-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15
