@@ -16,6 +16,8 @@ COPY . .
 
 RUN yarn run build
 
+COPY dist ./dist 
+
 # Генерируем Prisma Client
 RUN npx prisma migrate deploy
 RUN npx prisma generate
