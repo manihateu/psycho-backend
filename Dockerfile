@@ -18,5 +18,5 @@ RUN yarn run build
 
 RUN npx prisma migrate deploy
 RUN npx prisma generate
-RUN cd dist && ls && cd ..
+RUN cd dist && ls && pwd && cd ..
 CMD ["yarn", "run". "start:prod"]
