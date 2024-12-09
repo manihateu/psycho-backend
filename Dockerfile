@@ -38,4 +38,4 @@ RUN ls -al /app/dist
 EXPOSE 3000
 
 # Выполняем миграции Prisma и запускаем приложение
-CMD ["sh", "-c", "echo 'Current directory: ' $(pwd) && ls -al /app/dist && node /app/dist/main.js"]
+CMD ["sh", "-c", "echo 'Current directory: ' $(pwd) && ls -al /app && node /app/dist/main.js"]
