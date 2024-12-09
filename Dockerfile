@@ -1,22 +1,39 @@
-# Base image
-FROM node:23
+# Указываем базовый образ Node.js
+FROM node:23-alpine AS builder
 
-# Create app directory
-WORKDIR /usr/src/app
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Копируем package.json и package-lock.json для установки зависимостей
 COPY package*.json ./
 
-# Install app dependencies
-RUN yarn install
+# Устанавливаем зависимости
+RUN npm install
 
-# Bundle app source
+# Копируем остальные файлы проекта
 COPY . .
 
-# Creates a "dist" folder with the production build
-RUN yarn run build
+# Компилируем TypeScript в JavaScript
+RUN npm run build
 
-RUN npx prisma migrate deploy
+# Финальный образ
+FROM node:23-alpine AS production
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем зависимости и сборку из предыдущего этапа
+COPY —from=builder /app/node_modules/ ./node_modules/
+COPY —from=builder /app/dist/ ./dist/
+
+# Копируем Prisma файлы
+COPY prisma ./prisma
+
+# Генерируем Prisma Client
 RUN npx prisma generate
-RUN cd dist && ls && pwd && cd ..
-CMD ["node", "dist/main.js"]
+
+# Открываем порт приложения
+EXPOSE 3000
+
+# Выполняем миграции Prisma и запускаем приложение
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
