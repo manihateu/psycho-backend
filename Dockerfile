@@ -19,12 +19,12 @@ RUN yarn run build
 RUN ls -al /app/dist
 # Финальный образ
 
-# Копируем зависимости и сборку из предыдущего этапа
-COPY node_modules ./node_modules
-COPY dist ./dist
+# Копируем зависимости и сборку
+COPY ./node_modules ./node_modules
+COPY ./dist ./dist
 
 # Копируем Prisma файлы
-COPY prisma ./prisma
+COPY ./prisma ./prisma
 
 # Генерируем Prisma Client
 RUN npx prisma migrate deploy
