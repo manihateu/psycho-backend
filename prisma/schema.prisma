@@ -15,7 +15,7 @@ enum Role {
 
 datasource db {
   provider = "postgresql"
-  url = "postgres://postgres:password@192.168.0.7:5432/learncup"
+  url = "postgres://postgres:password@192.168.0.7:5432/psychoaibd"
 }
 
 model User {
