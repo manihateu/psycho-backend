@@ -5,7 +5,10 @@ WORKDIR /app
 # RUN apt install openssl
 COPY package*.json ./
 COPY yarn.lock ./
+RUN apt-get update && apt-get install -y openssl
 
+# Установите зависимости для Prisma
+RUN apt-get install -y libssl-dev
 RUN yarn install
 
 COPY . .
