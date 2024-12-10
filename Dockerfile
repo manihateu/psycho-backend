@@ -2,6 +2,7 @@
 FROM node:22-alpine 
 
 WORKDIR /app
+RUN apk update && apk add --no-cache openssl
 # RUN apt install openssl
 COPY package*.json ./
 COPY yarn.lock ./
