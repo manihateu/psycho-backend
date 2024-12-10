@@ -1,5 +1,5 @@
 # Указываем базовый образ Node.js
-FROM node:23-alpine 
+FROM node:22-alpine 
 
 WORKDIR /app
 # RUN apt install openssl
