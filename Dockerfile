@@ -2,7 +2,7 @@
 FROM node:23-alpine 
 
 WORKDIR /app
-RUN apt install openssl
+# RUN apt install openssl
 COPY package*.json ./
 COPY yarn.lock ./
 
