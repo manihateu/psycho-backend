@@ -14,8 +14,9 @@ RUN yarn run build
 
 COPY dist ./dist 
 
+RUN npx prisma migrate reset
 RUN npx prisma generate
-RUN npx prisma migrate dev
+RUN npx prisma migrate deploy
 
 EXPOSE 3000
 
