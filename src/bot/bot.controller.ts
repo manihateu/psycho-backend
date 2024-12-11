@@ -10,6 +10,6 @@ export class BotController {
   async postToBot(
     @Body() data: {message: string},
   ) {
-    return this.botService.sendMessage(data.message);
+    return await this.botService.sendMessage(data.message);
   }
 }
