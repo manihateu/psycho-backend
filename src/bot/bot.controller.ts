@@ -6,17 +6,10 @@ import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 export class BotController {
   constructor(private botService: BotService) {}
-
-  @Get()
-  async getFromBot(@Query('endpoint') endpoint: string) {
-    return this.botService.forwardRequest(endpoint, 'GET');
-  }
-
-  @Post()
+  @Post('/send')
   async postToBot(
-    @Query('endpoint') endpoint: string,
-    @Body() data: any,
+    @Body() data: {message: string},
   ) {
-    return this.botService.forwardRequest(endpoint, 'POST', data);
+    return this.botService.sendMessage(data.message);
   }
 }
