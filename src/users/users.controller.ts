@@ -27,6 +27,7 @@ export class UsersController {
                 secret: process.env.JWT_SECRET,
                 expiresIn: '15m',
             });
+            return accessToken
         }
         catch (e) {
             throw new UnauthorizedException('Invalid or expired token');
