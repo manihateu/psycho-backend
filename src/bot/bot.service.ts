@@ -3,7 +3,7 @@ import axios from 'axios';
 
 @Injectable()
 export class BotService {
-  private readonly botBaseUrl = 'http://localhost:11153';
+  private readonly botBaseUrl = 'http://127.0.0.1:11434';
 
   async forwardRequest(endpoint: string, method: 'GET' | 'POST', data?: any) {
     const url = `${this.botBaseUrl}/${endpoint}`;

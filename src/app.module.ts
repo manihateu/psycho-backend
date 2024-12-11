@@ -4,8 +4,16 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { BotModule } from './bot/bot.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/static'
+    }),
+    AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule
+  ],
 })
 export class AppModule {}
