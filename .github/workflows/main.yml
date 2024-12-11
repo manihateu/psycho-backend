@@ -23,4 +23,4 @@ jobs:
           cd /opt/psycho-ai-backend
           git pull origin main
           docker compose down
-          docker compose up --build -d
+          docker compose up --build -d --force-recreate
