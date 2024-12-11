@@ -11,12 +11,12 @@ RUN yarn install
 
 COPY . .
 
-RUN yarn run build
+# RUN yarn run build
 
-COPY dist ./dist 
+# COPY dist ./dist 
 RUN npx prisma migrate deploy
 RUN npx prisma generate
 
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+CMD ["yarn", "run". "start:dev"]
