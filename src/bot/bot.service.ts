@@ -3,7 +3,7 @@ import axios from 'axios';
 
 @Injectable()
 export class BotService {
-  private readonly botBaseUrl = 'http://127.0.0.1:11434';
+  private readonly botBaseUrl = 'http://92.252.240.206:11434';
 
   async sendMessage(message: string) {
     const url = `${this.botBaseUrl}/api/generate`;
