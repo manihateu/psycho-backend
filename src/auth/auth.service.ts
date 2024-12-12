@@ -75,7 +75,7 @@ export class AuthService {
           // Генерация новых токенов
           return this.generateAccessToken(user.id, user.email, user.role);
       } catch (e) {
-          throw new UnauthorizedException('Invalid or expired refresh token');
+          throw new UnauthorizedException(`Invalid or expired refresh token - ${e}`);
       }
   }
 }
