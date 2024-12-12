@@ -29,6 +29,18 @@ export class AuthService {
     return this.generateTokens(user.id, user.email, user.role);
   }
 
+  generateAccessToken(userId: number, email: string, role: "USER" | "ADMIN" ) {
+    const payload = { sub: userId, email, role };
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      // secret: "nik852!!!A",
+      expiresIn: '15m',
+    });
+    return {
+      accessToken
+    }
+  }
+
   generateTokens(userId: number, email: string, role: "USER" | "ADMIN") {
     const payload = { sub: userId, email, role };
     const accessToken = this.jwtService.sign(payload, {
@@ -46,5 +58,24 @@ export class AuthService {
     console.log(this.jwtService.decode(refreshToken))
 
     return { accessToken, refreshToken };
+  }
+
+  async refreshTokens(refreshToken: string) {
+      try {
+          const payload = this.jwtService.verify(refreshToken, {
+              secret: process.env.JWT_REFRESH_SECRET,
+          });
+
+          // Проверка, что пользователь существует (дополнительная безопасность)
+          const user = await this.usersService.getUserInfo(payload.sub);
+          if (!user) {
+              throw new UnauthorizedException('User not found');
+          }
+
+          // Генерация новых токенов
+          return this.generateAccessToken(user.id, user.email, user.role);
+      } catch (e) {
+          throw new UnauthorizedException('Invalid or expired refresh token');
+      }
   }
 }

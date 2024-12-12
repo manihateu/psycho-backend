@@ -13,39 +13,4 @@ export class UsersController {
         const userId = req.user.sub;
         return await this.usersService.getUserInfo(userId)
     }
-
-    @Post('/update-access')
-    async updateAccessToken ( @Body() data: {refreshToken: string}) {
-        try {
-            const payload = this.jwtService.verify(data.refreshToken, {
-                secret: process.env.JWT_REFRESH_SECRET
-            })
-            if (!payload.role) {
-                throw new UnauthorizedException('Role not found in token');
-            }
-            const accessToken = this.jwtService.sign(payload, {
-                secret: process.env.JWT_SECRET,
-                expiresIn: '15m',
-            });
-            return accessToken
-        }
-        catch (e) {
-            throw new UnauthorizedException('Invalid or expired token');
-        }
-    }
-
-    @Post("/check-access")
-    async checkAccessToken (@Body() data: {accessToken: string}) {
-        try {
-            const payload = this.jwtService.verify(data.accessToken, {
-                secret: process.env.JWT_SECRET
-            })
-            if (!payload.role) {
-                throw new UnauthorizedException('Role not found in token');
-            }
-        }
-        catch (e) {
-            throw new UnauthorizedException('Invalid or expired token');
-        }
-    }
 }
