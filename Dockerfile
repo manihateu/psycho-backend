@@ -19,4 +19,4 @@ RUN npx prisma generate
 
 EXPOSE 3000
 
-CMD ["yarn", "run", "dev"]
+CMD ["yarn", "run", "start:dev"]
