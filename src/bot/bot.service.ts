@@ -9,8 +9,8 @@ export class BotService {
     const url = `${this.botBaseUrl}/api/generate`;
     try {
       const response = await axios.post(url, {
-        model: "ALIENTELLIGENCE/psychologistv2:latest",
-        prompt: message,
+        model: "ALIENTELLIGENCE/psychologistv2",
+        prompt: `Ты отвечаешь на сообщения пользователя, ты создан для поддержки его ментального здоровья,отвечай на русском, обращайся баз пола пример - сделал(а), говори только о ЕГО самочувствии, ввод пользователя - ${message}`,
         stream: false
       });
       return response.data;
