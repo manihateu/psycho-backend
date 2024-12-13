@@ -27,7 +27,7 @@ export class CategoriesController {
   }
 
   @Post()
-  // @Roles('ADMIN')
+  @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
