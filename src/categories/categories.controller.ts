@@ -39,6 +39,6 @@ export class CategoriesController {
     })
   }))
   async createCategory(@Body() { name }: { name: string }, @UploadedFile() file) {
-    return this.categoriesService.createCategory(name, `/static/images/${file.filename}}`);
+    return this.categoriesService.createCategory(name, `/static/images/${file.filename}`);
   }
 }
