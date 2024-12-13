@@ -25,7 +25,7 @@ export class CategoriesService {
     return this.prisma.category.create({
       data: { 
         name,
-        imageUrl
+        imageurl: imageUrl
       },
     });
   }
