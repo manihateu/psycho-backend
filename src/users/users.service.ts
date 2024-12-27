@@ -22,6 +22,9 @@ export class UsersService {
       {
         where: {
            id: userId
+        },
+        include: {
+          categories: true
         }
       }
     )
