@@ -10,12 +10,15 @@ export class CategoriesService {
   }
 
   async addCategoryToUser(userId: number, categoryIds: number[]) {
+    const selectedCategories = []
+    for (let id of categoryIds) {
+      const category = await this.prisma.category.findFirst({where: {id}})
+      selectedCategories.push(category)
+    }
     return this.prisma.user.update({
       where: { id: userId },
       data: {
-        categories: {
-          connect: categoryIds.map((id) => ({ id })),
-        },
+        categories: selectedCategories as any,
       },
       include: { categories: true },
     });
