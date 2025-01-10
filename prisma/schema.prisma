@@ -39,6 +39,7 @@ model Category {
   name        String   @unique
   users       User[]   @relation("UserCategories")
   imageurl    String?
+  bgcolor     String?
 } 
 
 model Course {
