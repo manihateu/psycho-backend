@@ -25,12 +25,13 @@ export class CategoriesService {
     if (existingCategories.length !== categoryIds.length) {
         throw new Error('Some categories not found');
     }
+    // const selectedCategoriesIds = existingCategories.map(category => ({connect: { id: category.id }}))
     return this.prisma.user.update({
         where: { id: userId },
         data: {
             categories: {
-                connect: existingCategories.map(category => ({ id: category.id })),
-            },
+              connect: categoryIds.map(id => ({id})),
+            }
         },
         include: { categories: true },
     });

@@ -13,6 +13,11 @@ enum Role {
   ADMIN
 }
 
+enum CourseTypes {
+  КУРС
+  МЕДИТАЦИЯ
+}
+
 datasource db {
   provider = "postgresql"
   url = "postgres://postgres:password@192.168.0.7:5432/psychoaibd?schema=public&connection_limit=15"
@@ -25,11 +30,36 @@ model User {
   password   String
   role       Role       @default(USER)
   categories Category[] @relation("UserCategories")
+  likedCourses Course[] @relation("UserLikedCourses")
 }
 
 model Category {
   id          Int      @id @default(autoincrement())
   name        String   @unique
   users       User[]   @relation("UserCategories")
-  imageurl     String?
+  imageurl    String?
+} 
+
+model Course {
+  id              Int          @id @default(autoincrement())
+  name            String  
+  description     String 
+  type            CourseTypes  @default(КУРС)
+  timeFrom        Int          
+  timeTo          Int
+  cardLogoUrl     String
+  cardLogoBgColor String
+  cardBgUrl       String
+  countLiked      Int
+  countListened   Int
+  audioFiles      AudioFile[]  @relation("CourseAudioFiles")
+  usersLiked      User[]      @relation("UserLikedCourses")
+}
+
+model AudioFile {
+  id      Int         @id @default(autoincrement())
+  name    String
+  fileUrl String
+  duration Int
+  courses Course[]    @relation("CourseAudioFiles")
 }
