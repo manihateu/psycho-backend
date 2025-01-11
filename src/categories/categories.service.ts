@@ -26,7 +26,8 @@ export class CategoriesService {
         throw new Error('Some categories not found');
     }
     // const selectedCategoriesIds = existingCategories.map(category => ({connect: { id: category.id }}))
-    console.log(categoryIds)
+    console.log("categoryIds - ", categoryIds.map(id => ({id})))
+    console.log("userId - ", userId)
     return this.prisma.user.update({
         where: { id: userId },
         data: {
@@ -37,7 +38,7 @@ export class CategoriesService {
         include: { categories: true },
     });
 }
-
+  
   async createCategory(name: string, imageUrl: string) {
     return this.prisma.category.create({
       data: { 
