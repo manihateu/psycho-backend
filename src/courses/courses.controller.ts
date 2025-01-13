@@ -105,9 +105,11 @@ export class CoursesController {
   @Get(':courseId/audio/:audioId')
   async streamAudio(
     @Param('audioId') audioId: string,
+    @Param("courseId") courseId: string,
     @Res() res: Response,
   ) {
     const audiofile = await this.coursesService.getAudioById(+audioId)
+    await this.coursesService.addListen(+courseId)
     const audioPath = join(__dirname, '..', '..', 'public', 'audio', audiofile.fileUrl.split('/')[audiofile.fileUrl.split('/').length - 1]);
 
     if (!existsSync(audioPath)) {

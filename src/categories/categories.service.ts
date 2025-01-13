@@ -28,21 +28,16 @@ export class CategoriesService {
     // const selectedCategoriesIds = existingCategories.map(category => ({connect: { id: category.id }}))
     console.log("categoryIds - ", categoryIds.map(id => ({id})))
     console.log("userId - ", userId)
-    try {
-      for (let categoryId of categoryIds) {
-        await this.prisma.user.update({
-          where: {id: userId},
-          data: {
+    
+    return this.prisma.user.update({
+        where: { id: userId },
+        data: {
             categories: {
-              connect: {id: categoryId}
+              connect: categoryIds.map(id => ({id})),
             }
-          }
-        })
-      }
-      return { message: "Категории добавлены"}
-    } catch (e) {
-      throw new HttpException("Не удалось добавить категории", 400)
-    }
+        },
+        include: { categories: true },
+    });
 }
   
   async createCategory(name: string, imageUrl: string) {

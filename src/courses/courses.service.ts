@@ -41,6 +41,16 @@ export class CoursesService {
     });
   }
 
+  async addListen (id: number) {
+    const thisCourse = await this.prisma.course.findFirst({where: {id}})
+    return await this.prisma.course.update({
+        where: {id},
+        data: {
+            countListened: thisCourse.countLiked + 1
+        }
+    })
+  }
+
   // Добавление аудиофайла к курсу
   async addAudioToCourse(courseId: number, audioData: { name: string; fileUrl: string; duration: number }) {
     // Сначала создаём аудиофайл
