@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseInterceptors, UploadedFiles, Res, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseInterceptors, UploadedFiles, Res, NotFoundException, UseGuards } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { extname, join } from 'path';
@@ -6,8 +6,12 @@ import { diskStorage } from 'multer'
 import {v4 as uuidv4} from 'uuid'
 import { Response } from 'express';
 import { createReadStream, existsSync } from 'fs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('courses')
+@UseGuards(JwtAuthGuard)
 export class CoursesController {
   constructor(private coursesService: CoursesService) {}
 
@@ -19,6 +23,8 @@ export class CoursesController {
 
   // Создание курса
   @Post()
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -61,6 +67,8 @@ export class CoursesController {
 
   // Добавление аудио к курсу
   @Post(':courseId/audio')
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(
     FileFieldsInterceptor(
       [
