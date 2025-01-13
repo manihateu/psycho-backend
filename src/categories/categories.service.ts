@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -28,15 +28,21 @@ export class CategoriesService {
     // const selectedCategoriesIds = existingCategories.map(category => ({connect: { id: category.id }}))
     console.log("categoryIds - ", categoryIds.map(id => ({id})))
     console.log("userId - ", userId)
-    return this.prisma.user.update({
-        where: { id: userId },
-        data: {
+    try {
+      for (let categoryId of categoryIds) {
+        await this.prisma.user.update({
+          where: {id: userId},
+          data: {
             categories: {
-              connect: categoryIds.map(id => ({id})),
+              connect: {id: categoryId}
             }
-        },
-        include: { categories: true },
-    });
+          }
+        })
+      }
+      return { message: "Категории добавлены"}
+    } catch (e) {
+      throw new HttpException("Не удалось добавить категории", 400)
+    }
 }
   
   async createCategory(name: string, imageUrl: string) {

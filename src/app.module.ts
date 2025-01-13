@@ -6,6 +6,7 @@ import { BotModule } from './bot/bot.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static'
     }),
-    AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule
+    AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule, CoursesModule
   ],
 })
 export class AppModule {}
