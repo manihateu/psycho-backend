@@ -14,6 +14,7 @@ COPY . .
 # RUN yarn run build
 
 # COPY dist ./dist 
+RUN npx prisma db pull
 RUN npx prisma migrate deploy
 RUN npx prisma generate
 
