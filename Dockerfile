@@ -14,10 +14,8 @@ COPY . .
 # RUN yarn run build
 
 # COPY dist ./dist 
-RUN npx prisma db pull
-RUN npx prisma migrate deploy
 RUN npx prisma generate
 
 EXPOSE 3000
 
-CMD ["yarn", "run", "start:dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && yarn run start:dev"]
