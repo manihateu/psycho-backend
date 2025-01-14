@@ -8,14 +8,13 @@ COPY package*.json ./
 COPY yarn.lock ./
 
 RUN yarn install
-
 COPY . .
 
-# RUN yarn run build
+RUN yarn run build
 
-# COPY dist ./dist 
+COPY dist ./dist 
 # RUN npx prisma generate
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && yarn run start:dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && yarn run start:prod"]
