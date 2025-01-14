@@ -10,11 +10,32 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ./public:/app/public # Монтируем папку для статики
     ports:
       - "3000:3000"
     environment:
       - LLAMA_API_URL="127.0.0.1:11434"
       - JWT_SECRET="your_secret_key"
       - JWT_REFRESH_SECRET="your_refresh_secret_key"
+      - DATABASE_URL="postgresql://postgres:password@postgres:5432/psychoaibd?schema=public"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: psychoaibd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+    driver: local
