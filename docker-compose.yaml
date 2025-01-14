@@ -41,7 +41,7 @@ services:
     container_name: psycho-pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL=nik852.nikita@mail.ru
-      - PGADMIN_DEFAULT_PASWWORD=pgadmin4
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
     ports:
       - '5050:80'
     depends_on:
