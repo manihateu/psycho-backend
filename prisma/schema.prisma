@@ -20,7 +20,7 @@ enum CourseTypes {
 
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:password@postgres:5433/psychoaibd?schema=public"
+  url = "postgresql://postgres:password@postgres:5432/psychoaibd?schema=public"
   // url = "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"  //on migrations
 }
 
