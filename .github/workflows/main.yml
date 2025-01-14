@@ -22,5 +22,5 @@ jobs:
         script: |
           cd /opt/psycho-ai-backend
           git pull origin main
-          docker compose down app
-          docker compose up --build app
+          docker compose down 
+          docker compose up --build 
