@@ -12,7 +12,7 @@ COPY . .
 
 RUN yarn run build
 
-COPY dist ./dist 
+# COPY dist ./dist 
 # RUN npx prisma generate
 RUN npx prisma generate
 
@@ -20,4 +20,4 @@ EXPOSE 3000
 
 
 
-CMD ["yarn", "run", "start:migrate:prod"]
+CMD ["yarn", "run", "start:dev"]
