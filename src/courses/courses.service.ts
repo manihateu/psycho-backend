@@ -5,13 +5,20 @@ import { PrismaService } from '../prisma/prisma.service';
 export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  // Получение всех курсов
   async getAllCourses() {
-    return this.prisma.course.findMany({
+    return await this.prisma.course.findMany({
       include: {
-        audioFiles: true, // Включаем аудиофайлы для каждого курса
+        audioFiles: true, 
       },
     });
+  }
+
+  async getCourseById(id: number) {
+    return await this.prisma.course.findFirst({
+      where: {
+        id
+      }
+    })
   }
 
   async getAudioById(id: number) {
@@ -20,7 +27,6 @@ export class CoursesService {
     })
   }
 
-  // Создание нового курса
   async createCourse(data: {
     name: string;
     description: string;
@@ -51,16 +57,13 @@ export class CoursesService {
     })
   }
 
-  // Добавление аудиофайла к курсу
   async addAudioToCourse(courseId: number, audioData: { name: string; fileUrl: string; duration: number }) {
-    // Сначала создаём аудиофайл
     const audioFile = await this.prisma.audioFile.create({
       data: {
         ...audioData,
       },
     });
 
-    // Привязываем аудиофайл к курсу
     return this.prisma.course.update({
       where: { id: courseId },
       data: {

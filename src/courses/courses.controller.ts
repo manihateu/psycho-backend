@@ -15,25 +15,28 @@ import { RolesGuard } from 'src/auth/roles.guard';
 export class CoursesController {
   constructor(private coursesService: CoursesService) {}
 
-  // Получение всех курсов
   @Get()
   async getAllCourses() {
     return this.coursesService.getAllCourses();
   }
 
-  // Создание курса
+  @Get("/:id")
+  async getCourseById(@Param("id") id: string) {
+    return await this.coursesService.getCourseById(+id);
+  }
+
   @Post()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(
     FileFieldsInterceptor(
       [
-        { name: 'cardLogoUrl', maxCount: 1 }, // Логотип курса
-        { name: 'cardBgUrl', maxCount: 1 },  // Фон курса
+        { name: 'cardLogoUrl', maxCount: 1 }, 
+        { name: 'cardBgUrl', maxCount: 1 },  
       ],
       {
         storage: diskStorage({
-          destination: './public/images', // Папка для изображений
+          destination: './public/images', 
           filename: (req, file, callback) => {
             const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
             callback(null, uniqueName);
@@ -65,18 +68,17 @@ export class CoursesController {
   }
 
 
-  // Добавление аудио к курсу
   @Post(':courseId/audio')
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(
     FileFieldsInterceptor(
       [
-        { name: 'audio', maxCount: 1 }, // Аудиофайл
+        { name: 'audio', maxCount: 1 },
       ],
       {
         storage: diskStorage({
-          destination: './public/audio', // Папка для аудиофайлов
+          destination: './public/audio', 
           filename: (req, file, callback) => {
             const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
             callback(null, uniqueName);

@@ -32,6 +32,7 @@ model User {
   role       Role       @default(USER)
   categories Category[] @relation("UserCategories")
   likedCourses Course[] @relation("UserLikedCourses")
+  interactions UserCourseInteraction[]
 }
 
 model Category {
@@ -56,6 +57,7 @@ model Course {
   countListened   Int
   audioFiles      AudioFile[]  @relation("CourseAudioFiles")
   usersLiked      User[]      @relation("UserLikedCourses")
+  interactions UserCourseInteraction[]
 }
 
 model AudioFile {
@@ -64,4 +66,23 @@ model AudioFile {
   fileUrl String
   duration Int
   courses Course[]    @relation("CourseAudioFiles")
+}
+
+model UserCourseInteraction {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  interactionType InteractionType
+  timestamp DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId, interactionType]) 
+}
+
+enum InteractionType {
+  LIKE      
+  STARTED    
+  COMPLETED  
 }
