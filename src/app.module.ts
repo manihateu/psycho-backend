@@ -15,7 +15,6 @@ import { RecomendationModule } from './recomendation/recomendation.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static',
     }),
-    AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule, CoursesModule, RecomendationModule
     AuthModule,
     UsersModule,
     PrismaModule,
