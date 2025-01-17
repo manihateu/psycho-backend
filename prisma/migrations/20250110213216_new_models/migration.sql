@@ -3,6 +3,7 @@ CREATE TYPE "CourseTypes" AS ENUM ('КУРС', 'МЕДИТАЦИЯ');
 
 -- AlterTable
 ALTER TABLE "Category" ADD COLUMN "bgcolor" TEXT;
+ALTER TABLE "Category" ADD COLUMN "imageurl" TEXT;
 
 -- CreateTable
 CREATE TABLE "Course" (
