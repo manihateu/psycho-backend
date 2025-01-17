@@ -9,20 +9,19 @@ export class BotService {
     const url = `${this.botBaseUrl}/api/generate`;
     try {
       const response = await axios.post(url, {
-        model: "ALIENTELLIGENCE/psychologistv2",
+        model: 'ALIENTELLIGENCE/psychologistv2',
         prompt: `Ты отвечаешь на сообщения пользователя, ты создан для поддержки его ментального здоровья,отвечай на русском, обращайся баз пола пример - сделал(а), говори только о ЕГО самочувствии, ввод пользователя - ${message}`,
-        stream: false
+        stream: false,
       });
       return response.data;
-    }
-    catch (e) {
+    } catch (e) {
       if (e.response) {
-        throw new HttpException(e.response._response, 500)
+        throw new HttpException(e.response._response, 500);
       }
       if (e.request) {
-        throw new HttpException(e.request._response, 500)
+        throw new HttpException(e.request._response, 500);
       }
-      throw new HttpException(e, 500)
+      throw new HttpException(e, 500);
     }
   }
 }

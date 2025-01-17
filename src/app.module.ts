@@ -13,9 +13,16 @@ import { RecomendationModule } from './recomendation/recomendation.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/static'
+      serveRoot: '/static',
     }),
     AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule, CoursesModule, RecomendationModule
+    AuthModule,
+    UsersModule,
+    PrismaModule,
+    BotModule,
+    CategoriesModule,
+    CoursesModule,
+    RecomendationModule
   ],
 })
 export class AppModule {}
