@@ -98,4 +98,25 @@ export class RecomendationService {
       })
     }
     
+
+    async addInteraction(userId: number, courseId: number, interactionType: 'LIKE' | 'STARTED' | 'COMPLETED') {
+      await this.prisma.userCourseInteraction.upsert({
+        where: {
+          userId_courseId_interactionType: {
+            userId,
+            courseId,
+            interactionType,
+          },
+        },
+        update: {
+          timestamp: new Date(),
+        },
+        create: {
+          userId,
+          courseId,
+          interactionType,
+        },
+      });
+    }
+    
 }
