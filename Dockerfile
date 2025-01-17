@@ -12,7 +12,7 @@ COPY . .
 
 RUN yarn run build
 
-COPY dist ./dist 
+COPY dist ./ 
 # RUN npx prisma generate
 RUN npx prisma generate
 
