@@ -13,7 +13,6 @@ COPY . .
 
 # Собираем TypeScript-код
 RUN yarn run build
-RUN apk update && apk add --no-cache openssl
 # Генерируем Prisma Client
 RUN npx prisma generate
 
@@ -22,6 +21,7 @@ FROM node:22-alpine
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
+RUN apk update && apk add --no-cache openssl
 
 # Устанавливаем зависимости для production
 COPY package.json yarn.lock ./
