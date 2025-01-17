@@ -20,8 +20,8 @@ enum CourseTypes {
 
 datasource db {
   provider = "postgresql"
-  // url = env("DATABASE_URL")
-  url = "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"  //on migrations
+  url = env("DATABASE_URL")
+  // url = "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"  //on migrations
 }
 
 model User {
