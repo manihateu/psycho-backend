@@ -20,7 +20,7 @@ services:
     container_name: nest-app
     restart: always
     volumes:
-      - .:/app
+      - ./src:/app/src
       - /app/node_modules
       - ./public:/app/public # Монтируем папку для статики
     ports:
