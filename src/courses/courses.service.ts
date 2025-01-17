@@ -6,13 +6,20 @@ import { AuidioDataDto } from './courses.dto';
 export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  // Получение всех курсов
   async getAllCourses() {
-    return this.prisma.course.findMany({
+    return await this.prisma.course.findMany({
       include: {
-        audioFiles: true, // Включаем аудиофайлы для каждого курса
+        audioFiles: true, 
       },
     });
+  }
+
+  async getCourseById(id: number) {
+    return await this.prisma.course.findFirst({
+      where: {
+        id
+      }
+    })
   }
 
   async getAudioById(id: number) {
@@ -21,7 +28,6 @@ export class CoursesService {
     });
   }
 
-  // Создание нового курса
   async createCourse(data: {
     name: string;
     description: string;

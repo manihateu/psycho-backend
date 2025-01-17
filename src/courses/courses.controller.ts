@@ -40,6 +40,11 @@ export class CoursesController {
     return this.coursesService.getAllCourses();
   }
 
+  @Get("/:id")
+  async getCourseById(@Param("id") id: string) {
+    return await this.coursesService.getCourseById(+id);
+  }
+
   @Post()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
