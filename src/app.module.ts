@@ -21,7 +21,7 @@ import { RecomendationModule } from './recomendation/recomendation.module';
     BotModule,
     CategoriesModule,
     CoursesModule,
-    RecomendationModule
+    RecomendationModul
   ],
 })
 export class AppModule {}
