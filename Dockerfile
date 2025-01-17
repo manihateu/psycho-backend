@@ -10,9 +10,9 @@ COPY yarn.lock ./
 RUN yarn install
 
 COPY . .
-
+RUN ls
 RUN yarn run build
-
+RUN ls
 RUN npx prisma generate
 
 EXPOSE 3000
