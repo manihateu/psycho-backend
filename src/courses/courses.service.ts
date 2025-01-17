@@ -21,6 +21,40 @@ export class CoursesService {
     })
   }
 
+  async likeCourse(courseId: number, userId: number) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+        data: {
+            likedCourses: {
+              connect: {id: courseId}
+            }
+        },
+    })
+  }
+
+  async getLikesCountByCourseId(courseId: number) {
+    const {usersLiked} = await this.prisma.course.findFirst({
+      where: {
+        id: courseId
+      },
+      include: {
+        usersLiked: true
+      }
+    })
+    return usersLiked.length
+  }
+
+  async dislikeCourse(courseId: number, userId: number) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+        data: {
+            likedCourses: {
+              disconnect: {id: courseId}
+            }
+        },
+    })
+  }
+
   async getAudioById(id: number) {
     return await this.prisma.audioFile.findFirst({
         where: {id}
@@ -46,6 +80,8 @@ export class CoursesService {
       },
     });
   }
+
+
 
   async addListen (id: number) {
     const thisCourse = await this.prisma.course.findFirst({where: {id}})

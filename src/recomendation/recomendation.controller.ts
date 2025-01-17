@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpException, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { RecomendationService } from './recomendation.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 

@@ -9,7 +9,7 @@ export class PrismaService
       super({
         datasources: {
           db: {
-            url: process.env.DATABASE_URL
+            url: "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"
           }
         }
       })

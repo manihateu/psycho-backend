@@ -20,25 +20,25 @@ enum CourseTypes {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
-  // url = "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"  //on migrations
+  // url = env("DATABASE_URL")
+  url = "postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"  //on migrations
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
+  id         Int               @id @default(autoincrement())
+  email      String            @unique
   name       String
   password   String
-  role       Role       @default(USER)
-  categories Category[] @relation("UserCategories")
-  likedCourses Course[] @relation("UserLikedCourses")
+  role       Role              @default(USER)
+  categories Category[]        @relation("UserCategories")
+  likedCourses Course[]        @relation("UserLikedCourses")
   interactions UserCourseInteraction[]
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  users       User[]   @relation("UserCategories")
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  users       User[]           @relation("UserCategories")
   imageurl    String?
   bgcolor     String?
 } 
@@ -53,23 +53,23 @@ model Course {
   cardLogoUrl     String
   cardLogoBgColor String
   cardBgUrl       String
-  countLiked      Int
-  countListened   Int
+  countLiked      Int          @default(0)
+  countListened   Int          @default(0)
   audioFiles      AudioFile[]  @relation("CourseAudioFiles")
-  usersLiked      User[]      @relation("UserLikedCourses")
+  usersLiked      User[]       @relation("UserLikedCourses")
   interactions UserCourseInteraction[]
 }
 
 model AudioFile {
-  id      Int         @id @default(autoincrement())
+  id      Int                  @id @default(autoincrement())
   name    String
   fileUrl String
   duration Int
-  courses Course[]    @relation("CourseAudioFiles")
+  courses Course[]             @relation("CourseAudioFiles")
 }
 
 model UserCourseInteraction {
-  id        Int     @id @default(autoincrement())
+  id        Int                @id @default(autoincrement())
   userId    Int
   courseId  Int
   interactionType InteractionType
