@@ -7,9 +7,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 export class BotController {
   constructor(private botService: BotService) {}
   @Post('/send')
-  async postToBot(
-    @Body() data: {message: string},
-  ) {
+  async postToBot(@Body() data: { message: string }) {
     return await this.botService.sendMessage(data.message);
   }
 }

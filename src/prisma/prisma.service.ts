@@ -4,16 +4,17 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class PrismaService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy {
-    constructor () {
-      super({
-        datasources: {
-          db: {
-            url: process.env.DATABASE_URL
-          }
-        }
-      })
-    }
+  implements OnModuleInit, OnModuleDestroy
+{
+  constructor() {
+    super({
+      datasources: {
+        db: {
+          url: 'postgres://neondb_owner:jB1HFo9TyPVn@ep-proud-hall-a2dz761y-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require',
+        },
+      },
+    });
+  }
   async onModuleInit() {
     await this.$connect();
   }

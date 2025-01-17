@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuidioDataDto } from './courses.dto';
 
 @Injectable()
 export class CoursesService {
@@ -23,8 +24,8 @@ export class CoursesService {
 
   async getAudioById(id: number) {
     return await this.prisma.audioFile.findFirst({
-        where: {id}
-    })
+      where: { id },
+    });
   }
 
   async createCourse(data: {
@@ -37,7 +38,7 @@ export class CoursesService {
     cardLogoBgColor: string;
     cardBgUrl: string;
   }) {
-    console.log(data)
+    console.log(data);
     return this.prisma.course.create({
       data: {
         ...data,
@@ -47,20 +48,25 @@ export class CoursesService {
     });
   }
 
-  async addListen (id: number) {
-    const thisCourse = await this.prisma.course.findFirst({where: {id}})
+  async addListen(id: number) {
+    const thisCourse = await this.prisma.course.findFirst({ where: { id } });
     return await this.prisma.course.update({
-        where: {id},
-        data: {
-            countListened: thisCourse.countLiked + 1
-        }
-    })
+      where: { id },
+      data: {
+        countListened: thisCourse.countLiked + 1,
+      },
+    });
   }
 
-  async addAudioToCourse(courseId: number, audioData: { name: string; fileUrl: string; duration: number }) {
+  async addAudioToCourse(
+    courseId: number,
+    audioData: AuidioDataDto,
+    fileUrl: string,
+  ) {
     const audioFile = await this.prisma.audioFile.create({
       data: {
         ...audioData,
+        fileUrl,
       },
     });
 
