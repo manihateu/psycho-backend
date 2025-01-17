@@ -13,6 +13,6 @@ export class RecomendationController {
         if (isNaN(parsedLimit)) {
             throw new HttpException("limit указан не верно", 400)
         }
-        return this.recomendationService.recommendCourses(parsedLimit)
+        return await this.recomendationService.recommendCourses(parsedLimit)
     }
 }
