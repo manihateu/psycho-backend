@@ -12,8 +12,6 @@ COPY . .
 
 RUN yarn run build
 
-COPY dist ./ 
-# RUN npx prisma generate
 RUN npx prisma generate
 
 EXPOSE 3000
