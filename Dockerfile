@@ -14,7 +14,6 @@ COPY . .
 # Собираем TypeScript-код
 RUN yarn run build
 # Генерируем Prisma Client
-RUN npx prisma generate
 
 # Этап 2: Production-образ
 FROM node:22-alpine
@@ -31,7 +30,7 @@ RUN yarn install --frozen-lockfile --production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
-
+RUN npx prisma generate
 # Указываем порт
 EXPOSE 3000
 
