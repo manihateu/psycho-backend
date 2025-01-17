@@ -1,16 +1,33 @@
-import { Controller, Get, Post, Body, Param, UseInterceptors, UploadedFiles, Res, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFiles,
+  Res,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { extname, join } from 'path';
-import { diskStorage } from 'multer'
-import {v4 as uuidv4} from 'uuid'
+import { join } from 'path';
 import { Response } from 'express';
 import { createReadStream, existsSync } from 'fs';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { AuidioDataDto, CreateCourseDto, FilesOnCreateCourseDto, FindOneCourseParams, SwaggerCreateCourseDto } from './courses.dto';
-import { AddAudioFileInterceptor, CoursesCreateFilesFieldsInterceptor } from 'src/shared/file.images.interceptor';
+import {
+  AuidioDataDto,
+  CreateCourseDto,
+  FilesOnCreateCourseDto,
+  FindOneCourseParams,
+  SwaggerCreateCourseDto,
+} from './courses.dto';
+import {
+  AddAudioFileInterceptor,
+  CoursesCreateFilesFieldsInterceptor,
+} from 'src/shared/file.images.interceptor';
 import { ApiBody } from '@nestjs/swagger';
 
 @Controller('courses')
@@ -28,24 +45,27 @@ export class CoursesController {
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(CoursesCreateFilesFieldsInterceptor)
   @ApiBody({
-    description: "Данные курса",
-    type: SwaggerCreateCourseDto
+    description: 'Данные курса',
+    type: SwaggerCreateCourseDto,
   })
   async createCourse(
     @UploadedFiles() files: FilesOnCreateCourseDto,
     @Body() createCourseDto: CreateCourseDto,
   ) {
-    const cardLogoUrl = files.cardLogoUrl ? `/static/images/${files.cardLogoUrl[0].filename}` : null;
-    const cardBgUrl = files.cardBgUrl ? `/static/images/${files.cardBgUrl[0].filename}` : null;
-    createCourseDto.timeFrom = +createCourseDto.timeFrom
-    createCourseDto.timeTo = +createCourseDto.timeTo
+    const cardLogoUrl = files.cardLogoUrl
+      ? `/static/images/${files.cardLogoUrl[0].filename}`
+      : null;
+    const cardBgUrl = files.cardBgUrl
+      ? `/static/images/${files.cardBgUrl[0].filename}`
+      : null;
+    createCourseDto.timeFrom = +createCourseDto.timeFrom;
+    createCourseDto.timeTo = +createCourseDto.timeTo;
     return this.coursesService.createCourse({
       ...createCourseDto,
       cardLogoUrl,
       cardBgUrl,
     });
   }
-
 
   @Post(':courseId/audio')
   @Roles('ADMIN')
@@ -56,7 +76,9 @@ export class CoursesController {
     @Param('courseId') courseId: FindOneCourseParams,
     @Body() audioData: AuidioDataDto,
   ) {
-    const fileUrl = files.audio ? `/static/audio/${files.audio[0].filename}` : null;
+    const fileUrl = files.audio
+      ? `/static/audio/${files.audio[0].filename}`
+      : null;
     if (!fileUrl) {
       throw new Error('Audio file is required');
     }
@@ -67,12 +89,19 @@ export class CoursesController {
   @Get(':courseId/audio/:audioId')
   async streamAudio(
     @Param('audioId') audioId: string,
-    @Param("courseId") courseId: string,
+    @Param('courseId') courseId: string,
     @Res() res: Response,
   ) {
-    const audiofile = await this.coursesService.getAudioById(+audioId)
-    await this.coursesService.addListen(+courseId)
-    const audioPath = join(__dirname, '..', '..', 'public', 'audio', audiofile.fileUrl.split('/')[audiofile.fileUrl.split('/').length - 1]);
+    const audiofile = await this.coursesService.getAudioById(+audioId);
+    await this.coursesService.addListen(+courseId);
+    const audioPath = join(
+      __dirname,
+      '..',
+      '..',
+      'public',
+      'audio',
+      audiofile.fileUrl.split('/')[audiofile.fileUrl.split('/').length - 1],
+    );
 
     if (!existsSync(audioPath)) {
       throw new NotFoundException('Аудиофайл не найден.');
@@ -87,4 +116,3 @@ export class CoursesController {
     audioStream.pipe(res);
   }
 }
-

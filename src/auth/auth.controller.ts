@@ -7,8 +7,13 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() registerDto: RegisterDto,) {
-    return this.authService.register(registerDto.name, registerDto.email, registerDto.password, "USER");
+  async register(@Body() registerDto: RegisterDto) {
+    return this.authService.register(
+      registerDto.name,
+      registerDto.email,
+      registerDto.password,
+      'USER',
+    );
   }
 
   @Post('login')
@@ -18,6 +23,6 @@ export class AuthController {
 
   @Post('generate-refresh')
   async refresh(@Body() data: GenerateRefreshTokenDto) {
-    return this.authService.refreshTokens(data.refreshToken)
+    return this.authService.refreshTokens(data.refreshToken);
   }
 }

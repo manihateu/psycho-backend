@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -19,10 +24,10 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const payload = this.jwtService.verify(token, { 
-        secret: process.env.JWT_SECRET
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
         // secret: "nik852!!!A"
-       });
+      });
       request.user = payload;
       if (!payload.role) {
         throw new UnauthorizedException('Role not found in token');

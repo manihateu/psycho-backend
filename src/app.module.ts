@@ -12,9 +12,14 @@ import { CoursesModule } from './courses/courses.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/static'
+      serveRoot: '/static',
     }),
-    AuthModule, UsersModule, PrismaModule, BotModule, CategoriesModule, CoursesModule
+    AuthModule,
+    UsersModule,
+    PrismaModule,
+    BotModule,
+    CategoriesModule,
+    CoursesModule,
   ],
 })
 export class AppModule {}

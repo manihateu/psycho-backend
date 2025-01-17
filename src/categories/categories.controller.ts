@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, UseGuards, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 import { CategoriesService } from './categories.service';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer'
-import {v4 as uuidv4} from 'uuid'
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 import { extname } from 'path';
 import { CreateCategoryDto } from './categories.dto';
 import { ImagesFilesInterceptor } from 'src/shared/file.images.interceptor';
@@ -24,7 +33,7 @@ export class CategoriesController {
     @Req() req: any,
     @Body() { categoryIds }: { categoryIds: number[] },
   ) {
-    const userId = req.user.sub; 
+    const userId = req.user.sub;
     return this.categoriesService.addCategoryToUser(userId, categoryIds);
   }
 
@@ -32,7 +41,14 @@ export class CategoriesController {
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
   @UseInterceptors(ImagesFilesInterceptor)
-  async createCategory(@Body() { name, bgcolor }: CreateCategoryDto, @UploadedFile() file) {
-    return this.categoriesService.createCategory(name, `/static/images/${file.filename}`, bgcolor);
+  async createCategory(
+    @Body() { name, bgcolor }: CreateCategoryDto,
+    @UploadedFile() file,
+  ) {
+    return this.categoriesService.createCategory(
+      name,
+      `/static/images/${file.filename}`,
+      bgcolor,
+    );
   }
 }

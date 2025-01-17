@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle("Psycho ai api")
-    .setDescription("Документация к апи эндпоинтам")
+    .setTitle('Psycho ai api')
+    .setDescription('Документация к апи эндпоинтам')
     .setVersion('1.0')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
