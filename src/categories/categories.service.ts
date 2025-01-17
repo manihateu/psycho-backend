@@ -11,40 +11,43 @@ export class CategoriesService {
 
   async addCategoryToUser(userId: number, categoryIds: number[]) {
     const user = await this.prisma.user.findUnique({
-        where: { id: userId },
-        include: { categories: true },
+      where: { id: userId },
+      include: { categories: true },
     });
     if (!user) {
-        throw new Error(`User with id ${userId} not found`);
+      throw new Error(`User with id ${userId} not found`);
     }
     const existingCategories = await this.prisma.category.findMany({
-        where: {
-            id: { in: categoryIds },
-        },
+      where: {
+        id: { in: categoryIds },
+      },
     });
     if (existingCategories.length !== categoryIds.length) {
-        throw new Error('Some categories not found');
+      throw new Error('Some categories not found');
     }
     // const selectedCategoriesIds = existingCategories.map(category => ({connect: { id: category.id }}))
-    console.log("categoryIds - ", categoryIds.map(id => ({id})))
-    console.log("userId - ", userId)
-    
+    console.log(
+      'categoryIds - ',
+      categoryIds.map((id) => ({ id })),
+    );
+    console.log('userId - ', userId);
+
     return this.prisma.user.update({
-        where: { id: userId },
-        data: {
-            categories: {
-              connect: categoryIds.map(id => ({id})),
-            }
+      where: { id: userId },
+      data: {
+        categories: {
+          connect: categoryIds.map((id) => ({ id })),
         },
-        include: { categories: true },
+      },
+      include: { categories: true },
     });
-}
-  
-  async createCategory(name: string, imageUrl: string) {
+  }
+
+  async createCategory(name: string, imageUrl: string, bgcolor: string) {
     return this.prisma.category.create({
-      data: { 
+      data: {
         name,
-        imageurl: imageUrl
+        imageurl: imageUrl,
       },
     });
   }

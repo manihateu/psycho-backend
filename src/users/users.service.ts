@@ -6,10 +6,15 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(name: string, email: string, password: string, role?: 'USER' | 'ADMIN') {
+  async createUser(
+    name: string,
+    email: string,
+    password: string,
+    role?: 'USER' | 'ADMIN',
+  ) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.prisma.user.create({
-      data: { name, email, password: hashedPassword, role: 'USER'  },
+      data: { name, email, password: hashedPassword, role: 'USER' },
     });
   }
 
@@ -18,19 +23,17 @@ export class UsersService {
   }
 
   async getUserInfo(userId: number) {
-    const user = await this.prisma.user.findUnique(
-      {
-        where: {
-           id: userId
-        },
-        include: {
-          categories: true
-        }
-      }
-    )
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        categories: true,
+      },
+    });
 
-    const {password, ...user_} = user
+    const { password, ...user_ } = user;
 
-    return user_
+    return user_;
   }
 }
