@@ -9,49 +9,31 @@ import { createReadStream, existsSync } from 'fs';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { AuidioDataDto, CreateCourseDto, FilesOnCreateCourseDto, FindOneCourseParams, SwaggerCreateCourseDto } from './courses.dto';
+import { AddAudioFileInterceptor, CoursesCreateFilesFieldsInterceptor } from 'src/shared/file.images.interceptor';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('courses')
 @UseGuards(JwtAuthGuard)
 export class CoursesController {
   constructor(private coursesService: CoursesService) {}
 
-  // Получение всех курсов
   @Get()
   async getAllCourses() {
     return this.coursesService.getAllCourses();
   }
 
-  // Создание курса
   @Post()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'cardLogoUrl', maxCount: 1 }, // Логотип курса
-        { name: 'cardBgUrl', maxCount: 1 },  // Фон курса
-      ],
-      {
-        storage: diskStorage({
-          destination: './public/images', // Папка для изображений
-          filename: (req, file, callback) => {
-            const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-            callback(null, uniqueName);
-          },
-        }),
-      },
-    ),
-  )
+  @UseInterceptors(CoursesCreateFilesFieldsInterceptor)
+  @ApiBody({
+    description: "Данные курса",
+    type: SwaggerCreateCourseDto
+  })
   async createCourse(
-    @UploadedFiles() files: { cardLogoUrl?: Express.Multer.File[]; cardBgUrl?: Express.Multer.File[] },
-    @Body() createCourseDto: {
-      name: string;
-      description: string;
-      type?: 'КУРС' | 'МЕДИТАЦИЯ';
-      timeFrom: number;
-      timeTo: number;
-      cardLogoBgColor: string;
-    },
+    @UploadedFiles() files: FilesOnCreateCourseDto,
+    @Body() createCourseDto: CreateCourseDto,
   ) {
     const cardLogoUrl = files.cardLogoUrl ? `/static/images/${files.cardLogoUrl[0].filename}` : null;
     const cardBgUrl = files.cardBgUrl ? `/static/images/${files.cardBgUrl[0].filename}` : null;
@@ -65,41 +47,21 @@ export class CoursesController {
   }
 
 
-  // Добавление аудио к курсу
   @Post(':courseId/audio')
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'audio', maxCount: 1 }, // Аудиофайл
-      ],
-      {
-        storage: diskStorage({
-          destination: './public/audio', // Папка для аудиофайлов
-          filename: (req, file, callback) => {
-            const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-            callback(null, uniqueName);
-          },
-        }),
-      },
-    ),
-  )
+  @UseInterceptors(AddAudioFileInterceptor)
   async addAudioToCourse(
     @UploadedFiles() files: { audio?: Express.Multer.File[] },
-    @Param('courseId') courseId: string,
-    @Body() audioData: { name: string; duration: number },
+    @Param('courseId') courseId: FindOneCourseParams,
+    @Body() audioData: AuidioDataDto,
   ) {
     const fileUrl = files.audio ? `/static/audio/${files.audio[0].filename}` : null;
-    audioData.duration = +audioData.duration;
     if (!fileUrl) {
       throw new Error('Audio file is required');
     }
 
-    return this.coursesService.addAudioToCourse(+courseId, {
-      ...audioData,
-      fileUrl,
-    });
+    return this.coursesService.addAudioToCourse(+courseId, audioData, fileUrl);
   }
 
   @Get(':courseId/audio/:audioId')

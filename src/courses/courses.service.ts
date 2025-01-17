@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuidioDataDto } from './courses.dto';
 
 @Injectable()
 export class CoursesService {
@@ -51,16 +52,14 @@ export class CoursesService {
     })
   }
 
-  // Добавление аудиофайла к курсу
-  async addAudioToCourse(courseId: number, audioData: { name: string; fileUrl: string; duration: number }) {
-    // Сначала создаём аудиофайл
+  async addAudioToCourse(courseId: number, audioData: AuidioDataDto, fileUrl: string) {
     const audioFile = await this.prisma.audioFile.create({
       data: {
         ...audioData,
+        fileUrl
       },
     });
 
-    // Привязываем аудиофайл к курсу
     return this.prisma.course.update({
       where: { id: courseId },
       data: {

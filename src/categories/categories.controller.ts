@@ -7,6 +7,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer'
 import {v4 as uuidv4} from 'uuid'
 import { extname } from 'path';
+import { CreateCategoryDto } from './categories.dto';
+import { ImagesFilesInterceptor } from 'src/shared/file.images.interceptor';
 @Controller('categories')
 @UseGuards(JwtAuthGuard)
 export class CategoriesController {
@@ -29,16 +31,8 @@ export class CategoriesController {
   @Post()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, new RolesGuard(['ADMIN']))
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './public/images',
-      filename: (req, file, callback) => {
-        const uniqueName = `${uuidv4()}${extname(file.originalname)}`
-        callback(null, uniqueName)
-      }
-    })
-  }))
-  async createCategory(@Body() { name }: { name: string }, @UploadedFile() file) {
-    return this.categoriesService.createCategory(name, `/static/images/${file.filename}`);
+  @UseInterceptors(ImagesFilesInterceptor)
+  async createCategory(@Body() { name, bgcolor }: CreateCategoryDto, @UploadedFile() file) {
+    return this.categoriesService.createCategory(name, `/static/images/${file.filename}`, bgcolor);
   }
 }
