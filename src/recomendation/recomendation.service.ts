@@ -42,7 +42,16 @@ export class RecomendationService {
       return userVectors;
     }
 
-    private async getPopularCourses(limit: number = 10): Promise<any[]> {
+    private async getPopularCourses(limit: number = 10, userId: number): Promise<any[]> {
+        // const { categories } = await this.prisma.user.findFirst({
+        //   where: {
+        //     id: userId
+        //   },
+        //   include: {
+        //     categories: true
+        //   }
+        // })
+        //TO DO добавить категории к курсам
         return await this.prisma.course.findMany({
           orderBy: { countLiked: 'desc' }, 
           take: limit, 
@@ -54,7 +63,7 @@ export class RecomendationService {
       const targetUserVector = userVectors.get(userId);
     
       if (!targetUserVector) {
-        return await this.getPopularCourses(limit)
+        return await this.getPopularCourses(limit, userId)
       }
     
       const similarities: Array<{ userId: number; similarity: number }> = [];

@@ -6,8 +6,10 @@ export class NotificationService {
   async createNotification(userId: number, message: string) {
     const notification = await this.prisma.notification.create({
       data: {
-        userId: userId,
         message,
+        user: {
+            connect: { id: userId }
+        }
       },
     });
     return notification;
