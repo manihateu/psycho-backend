@@ -48,6 +48,7 @@ export class CategoriesService {
       data: {
         name,
         imageurl: imageUrl,
+        bgcolor
       },
     });
   }
