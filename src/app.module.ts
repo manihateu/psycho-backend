@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CoursesModule } from './courses/courses.module';
 import { RecomendationModule } from './recomendation/recomendation.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { RecomendationModule } from './recomendation/recomendation.module';
     BotModule,
     CategoriesModule,
     CoursesModule,
-    RecomendationModule
+    RecomendationModule,
+    NotificationModule
   ],
 })
 export class AppModule {}

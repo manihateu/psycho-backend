@@ -25,58 +25,59 @@ datasource db {
 }
 
 model User {
-  id         Int               @id @default(autoincrement())
-  email      String            @unique
-  name       String
-  password   String
-  role       Role              @default(USER)
-  categories Category[]        @relation("UserCategories")
-  likedCourses Course[]        @relation("UserLikedCourses")
-  interactions UserCourseInteraction[]
+  id            Int               @id @default(autoincrement())
+  email         String            @unique
+  name          String
+  password      String
+  role          Role              @default(USER)
+  categories    Category[]        @relation("UserCategories")
+  likedCourses  Course[]          @relation("UserLikedCourses")
+  interactions  UserCourseInteraction[]
+  notifications Notification[]
 }
 
 model Category {
-  id          Int              @id @default(autoincrement())
-  name        String           @unique
-  users       User[]           @relation("UserCategories")
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique
+  users       User[]              @relation("UserCategories")
   imageurl    String?
   bgcolor     String?
 } 
 
 model Course {
-  id              Int          @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
   name            String  
   description     String 
-  type            CourseTypes  @default(КУРС)
+  type            CourseTypes     @default(КУРС)
   timeFrom        Int          
   timeTo          Int
   cardLogoUrl     String
   cardLogoBgColor String
   cardBgUrl       String
-  countLiked      Int          @default(0)
-  countListened   Int          @default(0)
-  audioFiles      AudioFile[]  @relation("CourseAudioFiles")
-  usersLiked      User[]       @relation("UserLikedCourses")
-  interactions UserCourseInteraction[]
+  countLiked      Int             @default(0)
+  countListened   Int             @default(0)
+  audioFiles      AudioFile[]     @relation("CourseAudioFiles")
+  usersLiked      User[]          @relation("UserLikedCourses")
+  interactions    UserCourseInteraction[]
 }
 
 model AudioFile {
-  id      Int                  @id @default(autoincrement())
-  name    String
-  fileUrl String
-  duration Int
-  courses Course[]             @relation("CourseAudioFiles")
+  id          Int                  @id @default(autoincrement())
+  name        String
+  fileUrl     String
+  duration    Int
+  courses     Course[]             @relation("CourseAudioFiles")
 }
 
 model UserCourseInteraction {
-  id        Int                @id @default(autoincrement())
-  userId    Int
-  courseId  Int
+  id              Int              @id @default(autoincrement())
+  userId          Int
+  courseId        Int
   interactionType InteractionType
-  timestamp DateTime @default(now())
+  timestamp       DateTime         @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
+  user            User             @relation(fields: [userId], references: [id])
+  course          Course           @relation(fields: [courseId], references: [id])
 
   @@unique([userId, courseId, interactionType]) 
 }
@@ -85,4 +86,16 @@ enum InteractionType {
   LIKE      
   STARTED    
   COMPLETED  
+}
+
+model Notification {
+  id        Int                    @id @default(autoincrement())
+  userId    Int      
+  message   String   
+  createdAt DateTime               @default(now())
+  isRead    Boolean                @default(false)
+
+  user      User                   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
