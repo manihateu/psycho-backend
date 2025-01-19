@@ -34,7 +34,17 @@ export class CategoriesController {
     @Body() { categoryIds }: { categoryIds: number[] },
   ) {
     const userId = req.user.sub;
-    return this.categoriesService.addCategoryToUser(userId, categoryIds);
+    return await this.categoriesService.addCategoryToUser(userId, categoryIds);
+  }
+
+  @Post('/update-assign')
+  async updateAssignCategoriesToUser(
+    @Req() req: any,
+    @Body() { categoryIds }: { categoryIds: number[] },
+  ) {
+    const userId = req.user.sub;
+    await this.categoriesService.deleteCategoryToUser(userId)
+    return await this.categoriesService.addCategoryToUser(userId, categoryIds);
   }
 
   @Post()

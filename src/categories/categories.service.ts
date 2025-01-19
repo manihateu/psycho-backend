@@ -9,6 +9,19 @@ export class CategoriesService {
     return this.prisma.category.findMany();
   }
 
+  async deleteCategoryToUser(userId: number) {
+    return await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        categories: {
+          disconnect: []
+        }
+      }
+    })
+  }
+
   async addCategoryToUser(userId: number, categoryIds: number[]) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
