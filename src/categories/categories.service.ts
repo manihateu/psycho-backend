@@ -22,6 +22,37 @@ export class CategoriesService {
     });
   }
 
+  async updateCategoriesForUser(userId: number, categoryIds: number[]) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { categories: true },
+    });
+  
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`);
+    }
+  
+    const existingCategories = await this.prisma.category.findMany({
+      where: {
+        id: { in: categoryIds },
+      },
+    });
+  
+    if (existingCategories.length !== categoryIds.length) {
+      throw new Error('Some categories not found');
+    }
+  
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        categories: {
+          set: categoryIds.map((id) => ({ id })),
+        },
+      },
+      include: { categories: true },
+    });
+  }
+
   async addCategoryToUser(userId: number, categoryIds: number[]) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
