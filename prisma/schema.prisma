@@ -42,6 +42,7 @@ model Category {
   users       User[]              @relation("UserCategories")
   imageurl    String?
   bgcolor     String?
+  courses     Course[]            @relation("CourseCategories")
 } 
 
 model Course {
@@ -56,6 +57,7 @@ model Course {
   cardBgUrl       String
   countLiked      Int             @default(0)
   countListened   Int             @default(0)
+  categories      Category[]      @relation("CourseCategories")
   audioFiles      AudioFile[]     @relation("CourseAudioFiles")
   usersLiked      User[]          @relation("UserLikedCourses")
   interactions    UserCourseInteraction[]
@@ -89,13 +91,12 @@ enum InteractionType {
 }
 
 model Notification {
-  id        Int                    @id @default(autoincrement())
-  userId    Int      
-  message   String   
-  createdAt DateTime               @default(now())
-  isRead    Boolean                @default(false)
-
-  user      User                   @relation(fields: [userId], references: [id])
+  id          Int                    @id @default(autoincrement())
+  userId      Int      
+  message     String   
+  createdAt   DateTime               @default(now())
+  isRead      Boolean                @default(false)
+  user        User                   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

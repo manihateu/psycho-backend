@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Param, UseInterceptors, UploadedFiles, Res, NotFoundException, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFiles,
+  Res,
+  NotFoundException,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { join } from 'path';
 import { Response } from 'express';
@@ -23,31 +35,51 @@ import { ApiBody } from '@nestjs/swagger';
 @Controller('courses')
 @UseGuards(JwtAuthGuard)
 export class CoursesController {
-  constructor(private coursesService: CoursesService, private readonly recomenationService: RecomendationService) {}
+  constructor(
+    private coursesService: CoursesService,
+    private readonly recomenationService: RecomendationService,
+  ) {}
 
   @Get()
   async getAllCourses() {
     return this.coursesService.getAllCourses();
   }
 
-  @Get("/:id")
-  async getCourseById(@Param("id") id: string) {
+  @Get('/:id')
+  async getCourseById(@Param('id') id: string) {
     return await this.coursesService.getCourseById(+id);
   }
 
-  @Post("like/:courseId")
-  async likeCourse (@Param("courseId") courseId: string, @Req() req: any) {
-    return await this.coursesService.likeCourse(+courseId, req.user.sub)
+  @Post('/add-categories/:id')
+  async addCategoriesToCourse(
+    @Param('id') id: string,
+    @Body() categories: number[],
+  ) {
+    return await this.coursesService.addCategoryesToCourse(+id, categories);
   }
 
-  @Post("dislike/:courseId")
-  async dislikeCourse (@Param("courseId") courseId: string, @Req() req: any) {
-    return await this.coursesService.dislikeCourse(+courseId, req.user.sub)
+  @Post('/update-categories/:id')
+  async updateCategoriesToCourse(
+    @Param('id') id: string,
+    @Body() categories: number[],
+  ) {
+    await this.coursesService.deleteCategoriesToCourse(+id);
+    return await this.coursesService.addCategoryesToCourse(+id, categories);
   }
 
-  @Get("/listen-count/:courseId")
-  async getListenCount (@Param("courseId") courseId: string) {
-    return await this.coursesService.getLikesCountByCourseId(+courseId)
+  @Post('like/:courseId')
+  async likeCourse(@Param('courseId') courseId: string, @Req() req: any) {
+    return await this.coursesService.likeCourse(+courseId, req.user.sub);
+  }
+
+  @Post('dislike/:courseId')
+  async dislikeCourse(@Param('courseId') courseId: string, @Req() req: any) {
+    return await this.coursesService.dislikeCourse(+courseId, req.user.sub);
+  }
+
+  @Get('/listen-count/:courseId')
+  async getListenCount(@Param('courseId') courseId: string) {
+    return await this.coursesService.getLikesCountByCourseId(+courseId);
   }
 
   @Post()
@@ -101,9 +133,8 @@ export class CoursesController {
     @Param('audioId') audioId: string,
     @Param('courseId') courseId: string,
     @Res() res: Response,
-    @Req() req: any
+    @Req() req: any,
   ) {
-
     const audiofile = await this.coursesService.getAudioById(+audioId);
     await this.coursesService.addListen(+courseId);
     const audioPath = join(
@@ -126,12 +157,20 @@ export class CoursesController {
 
     const audioStream = createReadStream(audioPath);
     audioStream.pipe(res);
-    audioStream.on("open", async () => {
-      await this.recomenationService.addInteraction(+req.user.sub, +courseId, "STARTED")
-      await this.coursesService.addListen(+courseId)
-    })
-    audioStream.on("end", async () => {
-      await this.recomenationService.addInteraction(+req.user.sub, +courseId, "COMPLETED")
-    })
+    audioStream.on('open', async () => {
+      await this.recomenationService.addInteraction(
+        +req.user.sub,
+        +courseId,
+        'STARTED',
+      );
+      await this.coursesService.addListen(+courseId);
+    });
+    audioStream.on('end', async () => {
+      await this.recomenationService.addInteraction(
+        +req.user.sub,
+        +courseId,
+        'COMPLETED',
+      );
+    });
   }
 }

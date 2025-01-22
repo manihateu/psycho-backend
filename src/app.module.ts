@@ -23,7 +23,7 @@ import { NotificationModule } from './notification/notification.module';
     CategoriesModule,
     CoursesModule,
     RecomendationModule,
-    NotificationModule
+    NotificationModule,
   ],
 })
 export class AppModule {}

@@ -10,6 +10,6 @@ import { RecomendationService } from 'src/recomendation/recomendation.service';
 @Module({
   imports: [PrismaModule, JwtModule, RecomendationModule],
   providers: [CoursesService, PrismaService, JwtService, RecomendationService],
-  controllers: [CoursesController]
+  controllers: [CoursesController],
 })
 export class CoursesModule {}

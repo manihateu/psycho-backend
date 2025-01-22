@@ -7,7 +7,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { NotificationGateway } from './notification.gateway';
 @Module({
   imports: [PrismaModule, JwtModule],
-  providers: [NotificationService, PrismaService, JwtService, NotificationGateway],
-  controllers: [NotificationController]
+  providers: [
+    NotificationService,
+    PrismaService,
+    JwtService,
+    NotificationGateway,
+  ],
+  controllers: [NotificationController],
 })
 export class NotificationModule {}

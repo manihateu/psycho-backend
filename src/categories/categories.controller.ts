@@ -12,10 +12,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 import { CategoriesService } from './categories.service';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
-import { extname } from 'path';
 import { CreateCategoryDto } from './categories.dto';
 import { ImagesFilesInterceptor } from 'src/shared/file.images.interceptor';
 @Controller('categories')
@@ -43,7 +39,7 @@ export class CategoriesController {
     @Body() { categoryIds }: { categoryIds: number[] },
   ) {
     const userId = req.user.sub;
-    await this.categoriesService.deleteCategoryToUser(userId)
+    await this.categoriesService.deleteCategoryToUser(userId);
     return await this.categoriesService.addCategoryToUser(userId, categoryIds);
   }
 

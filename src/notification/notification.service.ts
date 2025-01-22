@@ -8,17 +8,17 @@ export class NotificationService {
       data: {
         message,
         user: {
-            connect: { id: userId }
-        }
+          connect: { id: userId },
+        },
       },
     });
     return notification;
   }
 
-  async markRead (notificationId: number) {
+  async markRead(notificationId: number) {
     await this.prisma.notification.update({
-        where: { id: notificationId },
-        data: { isRead: true },
+      where: { id: notificationId },
+      data: { isRead: true },
     });
   }
 }

@@ -9,7 +9,33 @@ export class CoursesService {
   async getAllCourses() {
     return await this.prisma.course.findMany({
       include: {
-        audioFiles: true, 
+        audioFiles: true,
+      },
+    });
+  }
+
+  async addCategoryesToCourse(courseId: number, categoriesIds: number[]) {
+    return await this.prisma.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        categories: {
+          connect: categoriesIds.map((id) => ({ id })),
+        },
+      },
+    });
+  }
+
+  async deleteCategoriesToCourse(courseId: number) {
+    return await this.prisma.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        categories: {
+          disconnect: [],
+        },
       },
     });
   }
@@ -17,43 +43,43 @@ export class CoursesService {
   async getCourseById(id: number) {
     return await this.prisma.course.findFirst({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 
   async likeCourse(courseId: number, userId: number) {
     return await this.prisma.user.update({
       where: { id: userId },
-        data: {
-            likedCourses: {
-              connect: {id: courseId}
-            }
+      data: {
+        likedCourses: {
+          connect: { id: courseId },
         },
-    })
+      },
+    });
   }
 
   async getLikesCountByCourseId(courseId: number) {
-    const {usersLiked} = await this.prisma.course.findFirst({
+    const { usersLiked } = await this.prisma.course.findFirst({
       where: {
-        id: courseId
+        id: courseId,
       },
       include: {
-        usersLiked: true
-      }
-    })
-    return usersLiked.length
+        usersLiked: true,
+      },
+    });
+    return usersLiked.length;
   }
 
   async dislikeCourse(courseId: number, userId: number) {
     return await this.prisma.user.update({
       where: { id: userId },
-        data: {
-            likedCourses: {
-              disconnect: {id: courseId}
-            }
+      data: {
+        likedCourses: {
+          disconnect: { id: courseId },
         },
-    })
+      },
+    });
   }
 
   async getAudioById(id: number) {

@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -12,14 +12,14 @@ export class CategoriesService {
   async deleteCategoryToUser(userId: number) {
     return await this.prisma.user.update({
       where: {
-        id: userId
+        id: userId,
       },
       data: {
         categories: {
-          disconnect: []
-        }
-      }
-    })
+          disconnect: [],
+        },
+      },
+    });
   }
 
   async addCategoryToUser(userId: number, categoryIds: number[]) {
@@ -61,7 +61,7 @@ export class CategoriesService {
       data: {
         name,
         imageurl: imageUrl,
-        bgcolor
+        bgcolor,
       },
     });
   }

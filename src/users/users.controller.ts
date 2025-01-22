@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -23,5 +15,11 @@ export class UsersController {
   async getUser(@Req() req: any) {
     const userId = req.user.sub;
     return await this.usersService.getUserInfo(userId);
+  }
+
+  @Get('/user/categories')
+  async getCategories(@Req() req: any) {
+    const userId = req.user.sub;
+    return await this.usersService.getUserCategories(userId);
   }
 }

@@ -6,12 +6,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(
-    name: string,
-    email: string,
-    password: string,
-    role?: 'USER' | 'ADMIN',
-  ) {
+  async createUser(name: string, email: string, password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.prisma.user.create({
       data: { name, email, password: hashedPassword, role: 'USER' },
@@ -32,8 +27,18 @@ export class UsersService {
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...user_ } = user;
 
     return user_;
+  }
+
+  async getUserCategories(userId: number) {
+    const user = this.prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    return user.categories;
   }
 }

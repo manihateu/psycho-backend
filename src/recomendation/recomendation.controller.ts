@@ -1,18 +1,24 @@
-import { Controller, Get, HttpException, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { RecomendationService } from './recomendation.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 
 @Controller('recomendation')
 @UseGuards(JwtAuthGuard)
 export class RecomendationController {
-    constructor (private readonly recomendationService: RecomendationService) {}
+  constructor(private readonly recomendationService: RecomendationService) {}
 
-    @Get()
-    async getRecomendations(@Query("limit") limit: string) {
-        const parsedLimit = Number(limit)
-        if (isNaN(parsedLimit)) {
-            throw new HttpException("limit указан не верно", 400)
-        }
-        return await this.recomendationService.recommendCourses(parsedLimit)
+  @Get()
+  async getRecomendations(@Query('limit') limit: string) {
+    const parsedLimit = Number(limit);
+    if (isNaN(parsedLimit)) {
+      throw new HttpException('limit указан не верно', 400);
     }
+    return await this.recomendationService.recommendCourses(parsedLimit);
+  }
 }
