@@ -28,13 +28,8 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const user = await this.usersService.createUser(
-      name,
-      email,
-      password,
-      role,
-    );
-    return this.generateTokens(user.id, user.email, user.role);
+    const user = await this.usersService.createUser(name, email, password);
+    return this.generateTokens(user.id, user.email, role);
   }
 
   async login(email: string, password: string) {
