@@ -43,7 +43,11 @@ export class AuthService {
     return this.generateTokens(user.id, user.email, user.role);
   }
 
-  generateAccessToken(userId: number, email: string, role: 'USER' | 'ADMIN') {
+  private generateAccessToken(
+    userId: number,
+    email: string,
+    role: 'USER' | 'ADMIN',
+  ) {
     const payload = { sub: userId, email, role };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
@@ -55,7 +59,11 @@ export class AuthService {
     };
   }
 
-  generateTokens(userId: number, email: string, role: 'USER' | 'ADMIN') {
+  private generateTokens(
+    userId: number,
+    email: string,
+    role: 'USER' | 'ADMIN',
+  ) {
     const payload = { sub: userId, email, role };
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
