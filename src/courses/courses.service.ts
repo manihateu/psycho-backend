@@ -45,6 +45,7 @@ export class CoursesService {
       where: {
         id,
       },
+      include: { audioFiles: true },
     });
   }
 
@@ -123,9 +124,11 @@ export class CoursesService {
     audioData: AuidioDataDto,
     fileUrl: string,
   ) {
+    const {duration, ...data} = audioData
     const audioFile = await this.prisma.audioFile.create({
       data: {
-        ...audioData,
+        ...data,
+        duration: +duration,
         fileUrl,
       },
     });
