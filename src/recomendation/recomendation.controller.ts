@@ -4,6 +4,7 @@ import {
   HttpException,
   Query,
   UseGuards,
+  Req
 } from '@nestjs/common';
 import { RecomendationService } from './recomendation.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
