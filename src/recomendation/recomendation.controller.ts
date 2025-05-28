@@ -14,11 +14,16 @@ export class RecomendationController {
   constructor(private readonly recomendationService: RecomendationService) {}
 
   @Get()
-  async getRecomendations(@Query('limit') limit: string) {
+  async getRecomendations(@Req() req: any, @Query('limit') limit: string) {
     const parsedLimit = +limit;
+    const userId = req.user.sub;
     if (isNaN(parsedLimit)) {
       throw new HttpException('limit указан не верно', 400);
     }
-    return await this.recomendationService.recommendCourses(parsedLimit);
+    return await this.recomendationService.recommendCourses(userId, parsedLimit);
   }
 }
+function Req(): (target: RecomendationController, propertyKey: "getRecomendations", parameterIndex: 0) => void {
+  throw new Error('Function not implemented.');
+}
+
