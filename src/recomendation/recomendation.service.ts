@@ -48,7 +48,7 @@ export class RecomendationService {
     limit: number = 10,
     userId: number,
   ): Promise<any[]> {
-    const { categories } = await this.prisma.user.findFirst({
+    const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -56,6 +56,7 @@ export class RecomendationService {
         categories: true,
       },
     });
+    const {categories} = user
     const categoriesIds = [];
     for (const categoriesId of categories) {
       categoriesIds.push(categoriesId.id);
