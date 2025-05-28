@@ -15,7 +15,7 @@ export class RecomendationController {
 
   @Get()
   async getRecomendations(@Query('limit') limit: string) {
-    const parsedLimit = Number(limit);
+    const parsedLimit = +limit;
     if (isNaN(parsedLimit)) {
       throw new HttpException('limit указан не верно', 400);
     }

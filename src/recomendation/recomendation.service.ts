@@ -56,6 +56,7 @@ export class RecomendationService {
         categories: true,
       },
     });
+    console.log(user)
     const {categories} = user
     const categoriesIds = [];
     for (const categoriesId of categories) {
