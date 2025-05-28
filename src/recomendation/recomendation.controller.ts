@@ -4,7 +4,7 @@ import {
   HttpException,
   Query,
   UseGuards,
-  Req
+  Req,
 } from '@nestjs/common';
 import { RecomendationService } from './recomendation.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
@@ -21,10 +21,10 @@ export class RecomendationController {
     if (isNaN(parsedLimit)) {
       throw new HttpException('limit указан не верно', 400);
     }
-    return await this.recomendationService.recommendCourses(userId, parsedLimit);
+    return await this.recomendationService.recommendCourses(
+      userId,
+      parsedLimit,
+    );
   }
-}
-function Req(): (target: RecomendationController, propertyKey: "getRecomendations", parameterIndex: 0) => void {
-  throw new Error('Function not implemented.');
 }
 
